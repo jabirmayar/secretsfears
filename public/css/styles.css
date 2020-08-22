@@ -1,4 +1,7 @@
-@import url(//allfont.net/allfont.css?fonts=bn-manson-nights);
+@font-face {
+font-family: 'BN Manson Nights';
+src: url(/fonts/bn-manson-nights.ttf) format('truetype');
+}
 
 body {
   background-image: url(/images/background.jpg);
@@ -7,7 +10,7 @@ body {
   background-size: cover;
   background-attachment: fixed;
   height: 100%;
-  font-family: 'BN Manson Nights';
+  font-family: 'BN Manson Nights', arial;
 }
 
 h1 {
