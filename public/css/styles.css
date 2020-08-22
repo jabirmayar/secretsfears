@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'BN Manson Nights';
+    font-style: normal;
+    font-weight: 400;
+    src: local('BN Manson Nights'), local('BNMansonNights-Regular'),
+        url(http://allfont.ru/cache/fonts/bn-manson-nights_751797bcd1e97dd43f411c8663584c4c.woff) format('woff'),
+        url(http://allfont.ru/cache/fonts/bn-manson-nights_751797bcd1e97dd43f411c8663584c4c.ttf) format('truetype');
+}
 
 body {
   background-image: url(/images/background.jpg);
