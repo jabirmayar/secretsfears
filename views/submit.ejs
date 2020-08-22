@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<div class="container">
+  <div class="jumbotron centered">
+    <i class="fas fa-key fa-6x"></i>
+    <%  if(added){ %>
+      <div class="alert alert-success secret-text" id="added" role="alert" >
+        Secret/fear added successfully!
+      </div>
+      <script type="text/javascript">
+       setTimeout(function(){ $("#added").fadeOut(); }, 2000);
+     </script>
+    <%  }  %>
+   <h1 class="display-4">Secrets/Fears</h1>
+
+    <p class="secret-text" style="font-size: 1.5rem; font-family: 'BN Manson Nights'; display: inline-block;padding-left:2%;padding-right:2%; padding-top: 0;">Don't keep your 'Darkest' secrets/fears, share them anonymously!</p>
+
+    <form action="/submit" method="POST">
+
+      <div class="form-group">
+        <input type="text" class="form-control text-center" name="secret" placeholder="What's your secret or fear?" autofocus required>
+      </div>
+
+      <button type="submit" class="btn btn-dark btn-lg" style="padding-left: 2%; padding-right: 2%; color: rgb(236, 70, 120);">Submit</button>
+      <a class="btn btn-dark btn-lg" href="/">Home</a>
+      <a class="btn btn-dark btn-lg" href="/mysecretsandfears">My Secrets/Fears</a>
+    </form>
+
+
+  </div>
+</div>
+<%- include('partials/footer') %>
