@@ -1,7 +1,7 @@
 {
-  "name": "Progressive Web App example",
-  "short_name": "pwa-tutorial",
-  "description": "Progressive Web App example to be used in conjuction with the article in LogRocket",
+  "name": "Everyone's Secrets and Fears",
+  "short_name": "Secrets-Fears",
+  "description": "Don't keep your 'Darkest' secrets/fears, share them anonymously!",
   "icons": [
     {
       "src": "/../images/android-chrome-512x512.png",
