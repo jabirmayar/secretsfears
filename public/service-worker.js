@@ -18,7 +18,7 @@ var URLS_TO_CACHE = [
 
                   })
                   .catch(err => {
-                      console.log('No se ha registrado el cache', err);
+                      console.log('Cache check', err);
                   })
       );
   });
