@@ -23,7 +23,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server-debug": "nodemon --inspect server.js"
+
   },
   "author": "Jabir Khan",
   "license": "ISC"

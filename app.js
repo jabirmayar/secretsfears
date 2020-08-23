@@ -58,7 +58,8 @@ const userSchema = new mongoose.Schema({
 const secretFearSchema = new mongoose.Schema({
   userID: String,
   secrets: String,
-  votes: Number,
+  upvotes: Number,
+  downvotes: Number,
   date: Date
 });
 
@@ -409,9 +410,8 @@ app.post("/upvote",function(req,res){
 //This tries to find the secret/fear with its id from upvote icon
     secretFear.findOne({ _id: id }, function (err, foundSecret){
         if(err) return console.log(err);
-        let votes = foundSecret.votes;
+        let votes = foundSecret.upvotes;
         let ID = foundSecret.userID;
-        votes = votes + 1;
 
 //This tries to find User from the above secret/fear with attribute 'userID'
     User.findOne({_id: req.user.id}, function(err, user){
@@ -428,8 +428,9 @@ app.post("/upvote",function(req,res){
         }
       }
         if(checkID === ""){
+          votes = votes + 1;
           //This finds secret/fear with Id and increment the votes attribute
-                            secretFear.findByIdAndUpdate(id, {votes: votes }, function (err, docs) {
+                            secretFear.findByIdAndUpdate(id, {upvotes: votes }, function (err, docs) {
                                 if (err){console.log(err)}
                                 else{
           //This finds user with the userID from the secret/fear(i.e creator of secret/fear)
@@ -446,11 +447,8 @@ app.post("/upvote",function(req,res){
                                               if(err) return console.log(err);
                                               user.upvoteIds.push(id);
                                               user.save(function(){
-                                                user.downvoteIds.pull(id);
-                                                user.save(function(){
-                                                  checkID = "";
-                                                      res.redirect(url);
-                                                });
+                                                checkID = "";
+                                                res.redirect(url);
                                           });
 
                                       });
@@ -460,11 +458,34 @@ app.post("/upvote",function(req,res){
                                 }
                           });
         }else{
-          res.redirect(url);
+           votes = votes - 1;
+          secretFear.findByIdAndUpdate(id, {upvotes: votes }, function (err, docs) {
+              if (err){console.log(err)}
+              else{
+          User.findOne({_id: ID}, function(err, userr){
+            if(err){
+              console.log(err);
+            }else{
+              if(userr){
+                  let vote = userr.upvote;
+                  vote = vote - 1;
+
+                  User.findByIdAndUpdate(ID, {$set: {upvote: vote }}, function (err, docss){
+                      if(err) return console.log(err);
+                      user.upvoteIds.pull(id);
+                      user.save(function(){
+                        res.redirect(url);
+                      });
+
+              });
+              }
+            }
+          });
+
         }
-
+}); }
     }else{
-
+      votes = votes + 1;
       secretFear.findByIdAndUpdate(id, {votes: votes }, function (err, docs) {
           if (err){console.log(err)}
           else{
@@ -480,10 +501,7 @@ app.post("/upvote",function(req,res){
                         if(err) return console.log(err);
                         user.upvoteIds.push(id);
                         user.save(function(){
-                          user.downvoteIds.pull(id);
-                          user.save(function(){
-                              res.redirect(url);
-                          });
+                          res.redirect(url);
                     });
 
                 });
@@ -514,9 +532,9 @@ app.post("/downvote",function(req,res){
 
     secretFear.findOne({ _id: id }, function (err, foundSecret){
         if(err) return console.log(err);
-        let votes = foundSecret.votes;
+        let votes = foundSecret.downvotes;
         let ID = foundSecret.userID;
-        votes = votes - 1;
+
 
     User.findOne({_id: req.user.id}, function(err, user){
       downvoteIds = user.downvoteIds;
@@ -533,8 +551,9 @@ app.post("/downvote",function(req,res){
         }
       }
         if(checkID === ""){
+          votes = votes - 1;
           //This finds secret/fear with Id and decrement the votes attribute
-                            secretFear.findByIdAndUpdate(id, {votes: votes }, function (err, docs) {
+                            secretFear.findByIdAndUpdate(id, {downvotes: votes }, function (err, docs) {
                                 if (err){console.log(err)}
                                 else{
           //This finds user with the userID from the secret/fear(i.e creator of secret/fear)
@@ -551,11 +570,8 @@ app.post("/downvote",function(req,res){
                                               if(err) return console.log(err);
                                               user.downvoteIds.push(id);
                                               user.save(function(){
-                                                user.upvoteIds.pull(id);
-                                                user.save(function(){
-                                                  checkID = "";
-                                                      res.redirect(url);
-                                                });
+                                                checkID = "";
+                                                res.redirect(url);
                                           });
 
                                       });
@@ -565,12 +581,39 @@ app.post("/downvote",function(req,res){
                                 }
                           });
         }else{
-          res.redirect(url);
+          votes = votes + 1;
+          //This finds secret/fear with Id and decrement the votes attribute
+                            secretFear.findByIdAndUpdate(id, {downvotes: votes }, function (err, docs) {
+                                if (err){console.log(err)}
+                                else{
+          //This finds user with the userID from the secret/fear(i.e creator of secret/fear)
+                                  User.findOne({_id: ID}, function(err, userr){
+
+                                    if(err){
+                                      console.log(err);
+                                    }else{
+                                      if(userr){
+                                          let vote = userr.downvote;
+                                          vote = vote - 1;
+          //This find user and increment downvote
+                                          User.findByIdAndUpdate(ID, {$set: {downvote: vote }}, function (err, docss){
+                                              if(err) return console.log(err);
+                                              user.downvoteIds.pull(id);
+                                              user.save(function(){
+                                                res.redirect(url);
+                                          });
+
+                                      });
+                                      }
+                                    }
+                                  });
+                                }
+                          });
         }
 
     }else{
-
-      secretFear.findByIdAndUpdate(id, {votes: votes }, function (err, docs) {
+      votes = votes - 1;
+      secretFear.findByIdAndUpdate(id, {downvotes: votes }, function (err, docs) {
           if (err){console.log(err)}
           else{
             User.findOne({_id: ID}, function(err, userr){
@@ -586,11 +629,7 @@ app.post("/downvote",function(req,res){
                         if(err) return console.log(err);
                         user.downvoteIds.push(id);
                         user.save(function(){
-                          user.upvoteIds.pull(id);
-                          user.save(function(){
-                              res.redirect(url);
-                          });
-
+                          res.redirect(url);
                     });
                     });
                 }
@@ -616,7 +655,8 @@ app.post("/submit", function(req, res) {
 let secret = new secretFear({
   secrets: req.body.secret,
   userID: req.user.id,
-  votes: 0,
+  upvotes: 0,
+  downvotes: 0,
   date: Date()
 });
 secret.save(function(err) {
